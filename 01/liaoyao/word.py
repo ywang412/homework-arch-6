@@ -14,8 +14,7 @@ def statistical(newfile):
 		else:
 			break
 	f.close()
-	for k in result:
-		print "%s : %s" % (k,result[k])
+	return result
 
 
 
@@ -23,4 +22,5 @@ if __name__ == '__main__':
 	if len(sys.argv) <= 1:
 		print 'Please given a parameter'
 	else:
-		statistical(sys.argv[1])
+		for k in statistical(sys.argv[1]):
+			print "%s : %s" % (k,statistical(sys.argv[1])[k])
