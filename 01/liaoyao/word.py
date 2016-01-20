@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-def statistical(newfile):
+def stical(newfile):
 	f = open(newfile)
 	result = {}
 	while True:
@@ -22,5 +22,5 @@ if __name__ == '__main__':
 	if len(sys.argv) <= 1:
 		print 'Please given a parameter'
 	else:
-		for k in statistical(sys.argv[1]):
-			print "%s : %s" % (k,statistical(sys.argv[1])[k])
+		for k in stical(sys.argv[1]):
+			print "%s : %s" % (k,stical(sys.argv[1])[k])
