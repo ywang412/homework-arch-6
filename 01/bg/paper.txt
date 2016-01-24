@@ -1,4 +1,3 @@
 done
-aabbaa
-done2
 jiwei
+done2
