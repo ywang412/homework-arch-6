@@ -25,7 +25,7 @@ with open('bigfile', 'r') as f:
     head_blank = True
     tail_blank = True
     while True:
-        result_data = f.read(100)
+        result_data = f.read(10)
         if not result_data:
             break
         head_blank = head_none(result_data)
