@@ -33,7 +33,7 @@ class Crawler(object):
     def depth_open_url(self,the_page=None): #获取每个页面的a标签连接
         if the_page == None:
             the_page = self._one_page()
-        p = re.compile(ur'<a.*href="(https.+?)"/*?>.*?<\/a>')
+        p = re.compile(ur'<a.*href="(https.+?)".*?>.*?<\/a>')
         matches = p.findall(the_page)
         if matches:
             return matches
