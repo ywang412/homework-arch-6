@@ -22,8 +22,6 @@ class Crawler(object):
             print e.code
         except urllib2.URLError, e:
             print e.reason
-        else:
-            print 'ok'
         the_page = response.read()
         return the_page
 
@@ -58,4 +56,4 @@ class Crawler(object):
 if __name__ == '__main__':
     test=Crawler('http://www.douban.com/people/ahbei/')
     tmp=test.depth_open_url()
-    print test.max_depth(tmp,1)
+    print test.max_depth(tmp,2)
