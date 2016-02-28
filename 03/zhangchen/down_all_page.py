@@ -30,17 +30,10 @@ class Crawler(object):
     def _one_page(self): #打开首页
         return self._req_url(self.url)
 
-#    def _down_image(self):
-#        p = re.compile(ur'<img src="(.*?)"\sclass="m_sub_img"')
-#        matches = re.findall(p, the_page)
-#        for m in matches:
-#            with file(m.split("/")[-1],"w") as f:
-#                    f.write(urllib2.urlopen(m).read())
-
     def depth_open_url(self,the_page=None): #获取每个页面的a标签连接
         if the_page == None:
             the_page = self._one_page()
-        p = re.compile(ur'<a\shref="(.+)">.+<\/a>')
+        p = re.compile(ur'<a.*href="(https.+?)"/*?>.*?<\/a>')
         matches = p.findall(the_page)
         if matches:
             return matches
@@ -57,7 +50,7 @@ class Crawler(object):
             return matches+self.max_depth(self.tmp_url,depth-1)
         else:
             return matches
-           
+
 
     def mass_remove(self,matches):
         return list(set(matches))
