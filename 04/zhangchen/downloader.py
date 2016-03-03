@@ -74,8 +74,10 @@ class downloader(object):
             n += 1
         for i in thread_list:
             i.join()
-
+        self.fd.close()
+        print 'file: {name} download success!'.format( name=self.name )
 
 if __name__ == '__main__':
-    check_argv()
-    downloader(sys.argv[1],sys.argv[2])
+    url,num = check_argv()
+    down = downloader(url,num)
+    down,run()
