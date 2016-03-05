@@ -15,7 +15,7 @@ def check_argv():
     elif not sys.argv[1].startswith('http://'):
         print_usg()
     try:
-        num = int(sys.atgv[2])
+        num = int(sys.argv[2])
     except:
         print_usg()
     return (sys.argv[1], num)
