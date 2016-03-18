@@ -47,6 +47,12 @@ def handleconn(conn):
         s = readmsg(conn)
         if len(s) == 0:
             break
+        if s[:9] == '--rename:':
+            s = s.strip()
+            broadcast("%s change name to %s\n" % (room[conn], s[9:]))
+            room[conn] = s[9:]
+            continue
+
         logging.info('%s say "%s"', addr, s.strip('\n'))
         broadcast('%s:%s'%(room[conn], s))
 
