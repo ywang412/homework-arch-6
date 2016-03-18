@@ -5,11 +5,17 @@ import threading
 
 mutex = threading.Lock()
 room = {}
+nameset = set()
+moot = {}
 
 def readmsg(conn):
     s = ""
     while True:
-        c = conn.recv(1)
+        try:
+            c = conn.recv(1)
+        except socket.error:
+            s = ""
+            break
         if len(c) == 0:
             break
         s += c
@@ -33,6 +39,8 @@ def joinroom(conn):
 def leaveroom(conn):
     mutex.acquire()
     #addr = '%s:%d'%(conn.getpeername())
+    del moot[room[conn]]
+    nameset.remove(room[conn])
     del room[conn]
     mutex.release()
 
@@ -47,20 +55,40 @@ def handleconn(conn):
         s = readmsg(conn)
         if len(s) == 0:
             break
-        if s[:9] == '--rename:':
+        elif s[:9] == '--rename:':
             s = s.strip()
-            broadcast("%s change name to %s\n" % (room[conn], s[9:]))
-            room[conn] = s[9:]
+            if s[9:] in nameset:
+                conn.send("reject rename\n")
+            else:
+                if room[conn] in nameset:
+                    nameset.remove(room[conn])
+                    del moot[root[conn]]
+                nameset.add(s[9:])
+                broadcast("%s change name to %s\n" % (room[conn], s[9:]))
+                room[conn] = s[9:]
+                moot[s[9:]] = conn
             continue
+        elif s[:7] == "--kick:":
+            s = s.strip()
+            if s[7:] in nameset:
+                kickconn = moot[s[7:]]
+                kickconn.send("You have benn booted!\n")
+                leaveroom(kickconn)
+                kickconn.close()
+            else:
+                conn.send("%s not found\n" % (s[7:]))
+            continue
+        else:
+            logging.info('%s say "%s"', addr, s.strip('\n'))
+            if room.get(conn, None):
+                broadcast('%s:%s'%(room[conn], s))
 
-        logging.info('%s say "%s"', addr, s.strip('\n'))
-        broadcast('%s:%s'%(room[conn], s))
-
-    mess = room[conn]
-    leaveroom(conn)
-    broadcast('%s leave room\n' %(mess))
-    conn.close()
-    logging.info('connection from %s closed', addr)
+    if room.get(conn, None):
+        mess = room[conn]
+        leaveroom(conn)
+        broadcast('%s leave room\n' %(mess))
+        conn.close()
+        logging.info('connection from %s closed', addr)
 
 def main():
     if len(sys.argv) < 2:
