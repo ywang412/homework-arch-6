@@ -19,7 +19,7 @@ def handleconn(conn, ip):
         if not name:
             conn.send('Please input your name:')
             name = conn.recv(4096).strip('\n')
-            if name == 'admin':
+           if name == 'admin':
                 conn.send('Please input your pas:')
                 pas = conn.recv(4096).strip('\n')
                 if pas == '123':
