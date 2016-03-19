@@ -52,10 +52,29 @@ def handleconn(conn):
         s = readmsg(conn)
         if len(s) == 0:
             break
-        if s[:5] == 'name=':
+        if s.rstrip('\n') == 'name=admin&password=admin':
+            if vars().has_key('name'):
+                old_name = name
+                name = 'admin'
+                room[name] = room[old_name]
+                del room[old_name]
+            else:
+                name = 'admin'
+                room[name] = room[addr]
+                del room[addr]
+        elif s[:3] == 'del':
+            someone = s[3:].rstrip('\n')
+            if someone in room and name == 'admin':
+                leaveroom(room[someone],someone)
+                logging.info('del "%s"', someone)
+                broadcast('del %s'%(someone))
+        elif s[:5] == 'name=':
             if vars().has_key('name'):
                 old_name = name
                 name = s[5:].rstrip('\n')
+                if name =='admin':
+                    name = old_name
+                    continue
                 room[name] = room[old_name]
                 del room[old_name]
             else:
