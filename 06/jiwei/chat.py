@@ -63,8 +63,9 @@ def handleconn(conn):
                 room[name] = room[addr]
                 del room[addr]
         elif s[:3] == 'del':
-            someone = s[3:].rstrip('\n')
+            someone = s[4:].rstrip('\n')
             if someone in room and name == 'admin':
+                room[someone].close()
                 leaveroom(room[someone],someone)
                 logging.info('del "%s"', someone)
                 broadcast('del %s'%(someone))
