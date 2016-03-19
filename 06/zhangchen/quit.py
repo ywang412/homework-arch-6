@@ -6,6 +6,11 @@ import logging
 import threading
 import socket
 import time
+
+
+
+killport = ''
+
 def handleconn(conn, ip):
     addr = conn.getpeername()
     logging.info('accept from {addr}'.format(addr=addr))
@@ -22,14 +27,13 @@ def handleconn(conn, ip):
                     s = conn.recv(4096).strip('\n')
                     if s == 'kill':
                         print 'print input port'
-                        global killport
                         killport = conn.recv(4096).strip('\n')
                         time.sleep(6)
                         if int(killport) == ip[1]:
                             exit(0)
             else:
                 if  killport == ip[1]:
-                    sys.exit()
+                    conn.close()
                 s = conn.recv(4096)
         if len(s) == 0:
             break
@@ -49,7 +53,6 @@ def main():
     s.bind(('0.0.0.0',int(sys.argv[1])))
     s.listen(3)
     logging.info('listening on 0.0.0.0:{port}'.format(port=sys.argv[1]))
-    global killport
     while True:
         conn, addr = s.accept()
 #        handleconn(conn)
