@@ -36,7 +36,7 @@ class downloader(object):
                 ranges.append((j, self.total))
             else:
                 ranges.append((j, j+self.offset))
-            return (ranges)
+        return (ranges)
 
     def save_range(self, p_cont, p_from):
         try:
