@@ -33,7 +33,7 @@ class downloader(object):
 
     def gen_ranges(self):
         thread_ranges = []
-        for i in xrange(self.num)
+        for i in xrange(self.num):
             j = i * self.offset
             if (j + self.offset) > self.total: #如果超出范围，则取文件总大小值
                 thread_ranges.append((j,self.total))
@@ -80,4 +80,4 @@ class downloader(object):
 if __name__ == '__main__':
     url,num = check_argv()
     down = downloader(url,num)
-    down,run()
+    down.run()
