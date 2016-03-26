@@ -30,7 +30,14 @@ class RedisServer():
     def start(self):
         self.server.Start()
 
-loop = Loop()
-server = RedisServer(loop, ('0.0.0.0', 9000))
-server.start()
-loop.loop()
+def main():
+    fmt = '%(asctime)-15s %(levelname)s: %(message)s'
+    logging.basicConfig(format=fmt, level=logging.INFO)
+
+    loop = Loop()
+    server = RedisServer(loop, ('0.0.0.0', 9000))
+    server.start()
+    loop.loop()
+
+if __name__ == '__main__':
+    main()
